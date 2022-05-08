@@ -12,7 +12,7 @@ import numpy as np
 import cv2
 import os
 
-dir = os.getcwd() + "/../../data/example_split/"
+dir = os.getcwd() + "/../../data/reduced_example_split/"
 
 print ("Data dir: " + dir )
 def load_images_from_folder(folder):
