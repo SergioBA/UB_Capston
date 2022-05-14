@@ -1,0 +1,27 @@
+Lugar                              Conv2D  de clasificacion
+    Pylorus
+    Ileo-cecal valve
+    Ampulla of vater   (No hay fotos - ignorada)
+
+Nada a destacar
+    Reduced Mucosal View
+    Normal clean mucosa
+
+Enfermedad (Imagenes a recortar)   Si se detecta alguna de estas sobre escrivir el resultado
+    
+    Foreign Bodies
+    Erythema
+    Blood -fresh
+    Blood -hematin
+    Angiectasia
+    Lymphangiectasia
+    Ulcer
+    Erosion
+    Polip
+
+
+Redes conscientes de sequencia
+
+Links para mirar --->   https://github.com/cmasch/zalando-fashion-mnist/blob/master/Simple_Convolutional_Neural_Network_Fashion-MNIST.ipynb
+
+
