@@ -3,7 +3,7 @@ Lugar                              Conv2D  de clasificacion
     Ileo-cecal valve
     Ampulla of vater   (No hay fotos - ignorada)
 
-Nada a destacar
+Nada a destacar                 Pesos pequeños
     Reduced Mucosal View
     Normal clean mucosa
 
@@ -22,6 +22,5 @@ Enfermedad (Imagenes a recortar)   Si se detecta alguna de estas sobre escrivir 
 
 Redes conscientes de sequencia
 
-Links para mirar --->   https://github.com/cmasch/zalando-fashion-mnist/blob/master/Simple_Convolutional_Neural_Network_Fashion-MNIST.ipynb
 
 

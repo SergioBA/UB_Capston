@@ -1,15 +1,5 @@
-# Links
-#        https://colab.research.google.com/drive/1EjxAt_OFrdpNgCNmV15XMCE8RI3PF3sD?usp=sharing
-#        https://www.tensorflow.org/tutorials/images/classification
-
-
-
-# Es necesario pasar las imagenes a blanco y negro?
-# Normalizar las imagenes entre 0 y 1  
-# Pasar los datos a cache en lugar de disco
 import time
-start = time.time()
-
+start = time.time()                       # Time measurement
 import matplotlib.pyplot as plt
 import os
 import tensorflow as tf
@@ -19,18 +9,21 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 from pathlib import Path
 
+
+
 #  Configuration
-batch_size = 4
-img_height = 336
-img_width = 336
-epochs=500
-UseRam = False
+batch_size = 1
+img_height = 256
+img_width = 256
+epochs=120
+UseRam = True
 UseWeights = True
 print("Configuration=> Batch: " + str(batch_size) + " Size: "+ str(img_height) +"X" +  str(img_width) + " Epochs: " + str(epochs))
 
 
 #                     Weights      Class
-class_weight = {  0:  0.2,         # Ampulla of vater         
+class_weight = {  
+                  0:  0.2,         # Ampulla of vater         
                   1:  0.0285,      # Angiectasia   			          
                   2:  1.,          # Blood - fresh			    
                   3:  0.2,         # Blood - hematin         
@@ -77,39 +70,43 @@ if UseRam:
   AUTOTUNE = tf.data.AUTOTUNE
   train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
   val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+  gpus = tf.config.experimental.list_physical_devices('GPU')
+  for gpu in gpus:
+      tf.config.experimental.set_memory_growth(gpu, True)
+else:
+  train_ds = train_ds.shuffle(1000)
 
 # Add more images due a Unbalanced input data
 data_augmentation = keras.Sequential(
   [
-    layers.RandomFlip("horizontal",
+    tf.keras.layers.RandomFlip("horizontal_and_vertical",
                       input_shape=(img_height,
                                   img_width,
                                   3)),
-    layers.RandomRotation(0.1),
-    layers.RandomZoom(0.1),
+    tf.keras.layers.RandomRotation(1),
+    tf.keras.layers.RandomZoom(1),
   ]
 )
 
 
 model = Sequential([
   data_augmentation,
-  layers.Rescaling(1./255),
+  layers.Rescaling(1./255),                                     # Normalization 
   layers.Conv2D(128, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
   layers.Conv2D(256, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
-  layers.Conv2D(512, 3, padding='same', activation='relu'),
+  layers.Dropout(0.1),
+  layers.Conv2D(256, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
   layers.Conv2D(128, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
-  layers.Dropout(0.2),
+  layers.Dropout(0.1),
   layers.Flatten(),
-  layers.Dense(64, activation='relu'),
-  layers.Dense(128, activation='relu'),
+  layers.Dense(512, activation='relu'),
   layers.Dense(256, activation='relu'),
-  layers.Dense(64, activation='relu'),
-  layers.Dense(64, activation='relu'),
-  layers.Dropout(0.2),
+  layers.Dense(128, activation='relu'),
+  layers.Dropout(0.1),
   layers.Dense(num_classes)
 ])
 
