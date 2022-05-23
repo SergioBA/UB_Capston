@@ -1,0 +1,26 @@
+0	Angiectasia	0.0285
+1	Blood_fresh	1.0000
+2	Erosion	0.1068
+3	Erythematous	0.1667
+4	Foreign_body	0.0373
+5	Ileocecal_valve	0.0196
+6	Lymphangiectasia	0.0982
+7	Normal	0.0014
+8	Pylorus	0.0235
+9	Reduced_mucosal_view	0.0236
+10	Ulcer	0.0809
+
+Ampulla of vater   		
+Angiectasia   			0.0285     
+Blood - fresh			1.0000
+Blood - hematin
+Erosion					0.1068
+Erythema				0.1667
+Foreign body			0.0373
+Ileocecal valve			0.0196
+Lymphangiectasia		0.0982
+Normal clean mucosa		0.0014
+Polyp
+Pylorus					0.0235
+Reduced mucosal view	0.0236
+Ulcer					0.0809
