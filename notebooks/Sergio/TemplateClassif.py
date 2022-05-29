@@ -156,9 +156,10 @@ if BasicModel:
 else:
   #  Resnet model  DOC --->  https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet_v2/ResNet152V2
   #                          https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet50/ResNet50
+  #                          https://www.tensorflow.org/api_docs/python/tf/keras/applications/efficientnet/EfficientNetB7
 
   if TrainWithoutTransference == False :
-      base_model = tf.keras.applications.resnet50.ResNet50(                     # Alternative -> resnet_v2.ResNet152V2  /  resnet50.ResNet50
+      base_model = tf.keras.applications.efficientnet.EfficientNetB7(                     # Alternative -> resnet_v2.ResNet152V2  /  resnet50.ResNet50
                                           include_top=False,
                                           weights='imagenet',
                                           input_tensor=None,
@@ -169,7 +170,7 @@ else:
       )
       base_model.trainable = False 
   else :
-      base_model = tf.keras.applications.resnet50.ResNet50(                     # Alternative -> resnet_v2.ResNet152V2
+      base_model = tf.keras.applications.efficientnet.EfficientNetB7(                     # Alternative -> resnet_v2.ResNet152V2  /  resnet50.ResNet50
                                           include_top=False,
                                           weights=None,
                                           input_tensor=None,
