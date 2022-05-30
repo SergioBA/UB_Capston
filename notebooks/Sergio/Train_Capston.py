@@ -14,14 +14,14 @@ from sklearn.metrics import classification_report
 
 
 #ReportName
-ReportName = "Basic_dataSetdataClassIllness"
+ReportName = "Basic_dataSetdataClassIllness_300px"
 data_dir = Path(os.getcwd() + "/../../data/dataClassIllnessExtend/")
 
 #  Dataset Configuration
 batch_size_param = 16
-img_height = 225            #Less resolution --> No classification
-img_width = 225
-initial_epochs = 400
+img_height = 240            #Max resolution 300     
+img_width = 240
+initial_epochs = 350
 test_percent = 0.2
 initial_seed=42
 
@@ -101,27 +101,33 @@ val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 data_augmentation = keras.Sequential(
   [
     # tf.keras.layers.RandomFlip("horizontal_and_vertical"),
-    # tf.keras.layers.RandomRotation(0.1),
+    # tf.keras.layers.RandomRotation(0.4),
     tf.keras.layers.RandomZoom(0.1),
-    tf.keras.layers.RandomContrast(0.3)
+    tf.keras.layers.RandomContrast(0.5)
   ]
 )
 model = Sequential([
   tf.keras.Input(shape=(img_height, img_width, 3)),
   data_augmentation,
   layers.Rescaling(1./255),
-  layers.Conv2D(16, 3, padding='same', activation='relu'),
+  layers.Conv2D(256, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
-  layers.Conv2D(32, 3, padding='same', activation='relu'),
+  layers.Conv2D(256, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
   layers.Conv2D(64, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
-  layers.Dropout(0.2),
+  layers.Conv2D(16, 3, padding='same', activation='relu'),
+  layers.MaxPooling2D(),
+  layers.Conv2D(16, 3, padding='same', activation='relu'),
+  layers.MaxPooling2D(),
+  layers.Conv2D(16, 3, padding='same', activation='relu'),
+  layers.MaxPooling2D(),
   layers.Flatten(),
-  layers.Dense(128, activation='relu'),
+  layers.Dense(64, activation='relu'),
   layers.Dense(num_classes)
 ])
-model.compile(optimizer='adam',
+opt = keras.optimizers.Adam(learning_rate=0.0001)
+model.compile(optimizer=opt,
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
@@ -131,6 +137,9 @@ history = model.fit(
   epochs = initial_epochs, batch_size = batch_size_param,
   class_weight = weights
 )
+
+model.save(ReportName + '.h5')
+print("Modelo guardado!")
 
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
