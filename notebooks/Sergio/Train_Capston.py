@@ -18,11 +18,11 @@ ReportName = "Basic_dataSetdataClassIllness_300px"
 data_dir = Path(os.getcwd() + "/../../data/dataClassIllnessExtend/")
 
 #  Dataset Configuration
-batch_size_param = 16
-img_height = 240            #Max resolution 300     
-img_width = 240
-initial_epochs = 350
-test_percent = 0.2
+batch_size_param = 100
+img_height = 100            #Max resolution 300     
+img_width = 100
+initial_epochs = 600
+test_percent = 0.3
 initial_seed=42
 
 # OnlyCPU = True
@@ -32,7 +32,7 @@ initial_seed=42
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
   data_dir,
-  # shuffle=True,
+  shuffle=True,
   validation_split=test_percent,
   color_mode = "rgb",
   subset="training",
@@ -45,7 +45,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
 
 val_ds = tf.keras.utils.image_dataset_from_directory(
   data_dir,
-  # shuffle=True,
+  shuffle=True,
   validation_split=test_percent,
   color_mode = "rgb",
   subset="validation",
@@ -93,16 +93,16 @@ for specificClass in data_dir.iterdir():          #Loop for each folder
 print("Weights per class: "+str(DataSetPrintInfo))
 
 AUTOTUNE = tf.data.AUTOTUNE
-train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
+train_ds = train_ds.cache().shuffle(10000).prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
 # Add more images due a Unbalanced input data
 # Doc ----> https://www.tensorflow.org/guide/keras/preprocessing_layers
 data_augmentation = keras.Sequential(
   [
-    # tf.keras.layers.RandomFlip("horizontal_and_vertical"),
-    # tf.keras.layers.RandomRotation(0.4),
-    tf.keras.layers.RandomZoom(0.1),
+    tf.keras.layers.RandomFlip("horizontal_and_vertical"),
+    tf.keras.layers.RandomRotation(0.6),
+    tf.keras.layers.RandomZoom(0.3),
     tf.keras.layers.RandomContrast(0.5)
   ]
 )
