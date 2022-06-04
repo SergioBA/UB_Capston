@@ -1,4 +1,4 @@
-# Execute -->  cd /home/sergio/Postgrado/UB_Capston/notebooks/Sergio/ ; python3   Train_Capston.py
+# Execute -->  cd /home/sergio/Postgrado/UB_Capston/notebooks/Sergio/;   python3 Train_CapstonClassIllness.py
 import time
 start = time.time()                       # Time measurement
 import matplotlib.pyplot as plt
@@ -11,19 +11,23 @@ from tensorflow.keras.models import Sequential
 from pathlib import Path
 import sklearn.metrics as mtc
 from sklearn.metrics import classification_report
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import confusion_matrix
 
 
 #ReportName
-ReportName = "Basic_dataSetdataClassIllness_300px"
-data_dir = Path(os.getcwd() + "/../../data/dataClassIllnessExtend/")
+ReportName = "Basic_WithAug_dataSetRandomSplits_50Percent"
+ReportFile = open(ReportName+'.txt','w+')     # Create a report file
+ReportFile.seek(0)
+data_dir = Path(os.getcwd() + "/../../data/dataSetOnly11Classes")
 
 #  Dataset Configuration
 batch_size_param = 100
 img_height = 100            #Max resolution 300     
 img_width = 100
-initial_epochs = 600
-test_percent = 0.3
-initial_seed=42
+initial_epochs = 300
+test_percent = 0.5
+initial_seed=33
 
 # OnlyCPU = True
 # if OnlyCPU:
@@ -67,14 +71,14 @@ for image, label in val_ds.take(-1):
 vallabels = np.array(vallabelsList)
 valImages = np.array(valDataList)
 
-# print("List of class:")
+ReportFile.write("List of class:\n")
 class_names = train_ds.class_names
 num_classes = len(class_names)        #Number of classes
 weights_temp = dict()                 # To load className and ClassNumber
 DataSetPrintInfo = dict()
 count = 0
 for e in class_names:                 # Temporal dict with class name and class number
-    # print("    "+e)
+    ReportFile.write("    "+str(count)+" : "+e+"\n")
     weights_temp[e] = count
     count = count + 1
 
@@ -90,7 +94,7 @@ for specificClass in data_dir.iterdir():          #Loop for each folder
           initial_count += 1
   weights[weights_temp[tail]]= float(totalImages/(num_classes  * initial_count))
   DataSetPrintInfo[tail] = {"NumClass ":weights_temp[tail],"NumElems": initial_count, "Weight": float(totalImages/(num_classes  * initial_count))}
-print("Weights per class: "+str(DataSetPrintInfo))
+ReportFile.write("Weights per class: "+str(DataSetPrintInfo)+"\n")
 
 AUTOTUNE = tf.data.AUTOTUNE
 train_ds = train_ds.cache().shuffle(10000).prefetch(buffer_size=AUTOTUNE)
@@ -139,7 +143,7 @@ history = model.fit(
 )
 
 model.save(ReportName + '.h5')
-print("Modelo guardado!")
+# print("Modelo guardado!")
 
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
@@ -151,46 +155,35 @@ epochs_range = range(initial_epochs)
 
 end = time.time()
 total_time = end - start
-print("Total time train : "+ str(total_time))
+ReportFile.write("Total time train : "+ str(total_time)+"\n")
 
 loss0, accuracy0, *is_anything_else_being_returned = model.evaluate(valImages,vallabels)
-print("Initial loss: {:.2f}".format(loss0))
-print("Initial accuracy: {:.2f}".format(accuracy0))
+ReportFile.write("Initial loss: {:.2f}\n".format(loss0))
+ReportFile.write("Initial accuracy: {:.2f}\n".format(accuracy0))
 
-plt.figure(figsize=(8, 8))
-plt.subplot(1, 2, 1)
-plt.plot(epochs_range, acc, label='Training Accuracy')
-plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-plt.legend(loc='lower right')
-plt.title('Training and Validation Accuracy')
 
-plt.subplot(1, 2, 2)
-plt.plot(epochs_range, loss, label='Training Loss')
-plt.plot(epochs_range, val_loss, label='Validation Loss')
-plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
-plt.savefig(ReportName + '.png')
+
 
 # Evaluate the model
 
 def test_model(y_true, y_predicted):
-    print("Accuracy = {:.3f}".format(mtc.accuracy_score(y_true, y_predicted)))
-    print("Accuracy Balanced = {:.3f}".format(mtc.balanced_accuracy_score(y_true, y_predicted)))
+    ReportFile.write("Accuracy = {:.3f}\n".format(mtc.accuracy_score(y_true, y_predicted)))
+    ReportFile.write("Accuracy Balanced = {:.3f}\n".format(mtc.balanced_accuracy_score(y_true, y_predicted)))
     
-    print("Precision micro = {:.3f}".format(mtc.precision_score(y_true,y_predicted, average="micro")))
-    print("Precision macro = {:.3f}".format(mtc.precision_score(y_true,y_predicted, average="macro")))
-    print("Precision weighted = {:.3f}".format(mtc.precision_score(y_true,y_predicted, average="weighted")))
+    ReportFile.write("Precision micro = {:.3f}\n".format(mtc.precision_score(y_true,y_predicted, average="micro")))
+    ReportFile.write("Precision macro = {:.3f}\n".format(mtc.precision_score(y_true,y_predicted, average="macro")))
+    ReportFile.write("Precision weighted = {:.3f}\n".format(mtc.precision_score(y_true,y_predicted, average="weighted")))
     
-    print("Recall micro = {:.3f}".format(mtc.recall_score(y_true, y_predicted, average="micro")))
-    print("Recall macro = {:.3f}".format(mtc.recall_score(y_true, y_predicted, average="macro")))
-    print("Recall weighted = {:.3f}".format(mtc.recall_score(y_true, y_predicted, average="weighted")))
+    ReportFile.write("Recall micro = {:.3f}\n".format(mtc.recall_score(y_true, y_predicted, average="micro")))
+    ReportFile.write("Recall macro = {:.3f}\n".format(mtc.recall_score(y_true, y_predicted, average="macro")))
+    ReportFile.write("Recall weighted = {:.3f}\n".format(mtc.recall_score(y_true, y_predicted, average="weighted")))
 
-    print("F1 micro = {:.3f}".format(mtc.f1_score(y_true, y_predicted, average="micro")))
-    print("F1 macro = {:.3f}".format(mtc.f1_score(y_true, y_predicted, average="macro")))
-    print("F1 weighted = {:.3f}".format(mtc.f1_score(y_true, y_predicted, average="weighted")))
+    ReportFile.write("F1 micro = {:.3f}\n".format(mtc.f1_score(y_true, y_predicted, average="micro")))
+    ReportFile.write("F1 macro = {:.3f}\n".format(mtc.f1_score(y_true, y_predicted, average="macro")))
+    ReportFile.write("F1 weighted = {:.3f}\n".format(mtc.f1_score(y_true, y_predicted, average="weighted")))
 
-    print("MCC = {:.3f}".format(mtc.matthews_corrcoef(y_true, y_predicted)))
-    print("Kappa = {:.3f}".format(mtc.cohen_kappa_score(y_true, y_predicted)))
+    ReportFile.write("MCC = {:.3f}\n".format(mtc.matthews_corrcoef(y_true, y_predicted)))
+    ReportFile.write("Kappa = {:.3f}\n".format(mtc.cohen_kappa_score(y_true, y_predicted)))
 
 
 # Last number from the models
@@ -199,7 +192,33 @@ predictionOfValImages = []
 for value in predValImages:
   predictionOfValImages.append(np.argmax(value))
 test_model(vallabels, predictionOfValImages)
-print("Classes not found")
-print(set(vallabels) - set(predictionOfValImages))
+ReportFile.write("Classes not found" + str(set(vallabels) - set(predictionOfValImages))+"\n")
 report = classification_report(vallabels, predictionOfValImages)
-print(report)
+ReportFile.write(report+"\n")
+ReportFile.truncate()
+ReportFile.close() 
+
+# Store images ina file
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 3, 1)
+plt.plot(epochs_range, acc, label='Training Accuracy')
+plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training and Validation Accuracy')
+
+plt.subplot(1, 3, 2)
+plt.plot(epochs_range, loss, label='Training Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+plt.savefig(ReportName + '_Train_Val.png')
+
+# confusion matrix plot
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 1, 1)
+cm = confusion_matrix(vallabels, predictionOfValImages, normalize='true')
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels= list(range(num_classes)))
+disp.plot(cmap=plt.cm.Blues)
+plt.title('Confusion Matrix')
+plt.savefig(ReportName + '_ConfMatrix.png')
+

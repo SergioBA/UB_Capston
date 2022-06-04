@@ -1,0 +1,45 @@
+Epoch 350/350
+496/496 [==============================] - 65s 131ms/step - loss: 0.0148 - accuracy: 0.9947 - val_loss: 0.4712 - val_accuracy: 0.9370
+Modelo guardado!
+Total time train : 22905.685771226883
+2022-05-31 04:53:16.643275: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.97GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-05-31 04:53:16.643308: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.97GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-05-31 04:53:16.834740: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.00GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-05-31 04:53:16.834768: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.00GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+61/62 [============================>.] - ETA: 0s - loss: 0.4787 - accuracy: 0.93602022-05-31 04:53:22.608382: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.92GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-05-31 04:53:22.608420: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.92GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-05-31 04:53:23.107199: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.85GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-05-31 04:53:23.107233: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.85GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+62/62 [==============================] - 7s 106ms/step - loss: 0.4712 - accuracy: 0.9370
+Initial loss: 0.47
+Initial accuracy: 0.94
+Accuracy = 0.937
+Accuracy Balanced = 0.902
+Precision micro = 0.937
+Precision macro = 0.929
+Precision weighted = 0.937
+Recall micro = 0.937
+Recall macro = 0.902
+Recall weighted = 0.937
+F1 micro = 0.937
+F1 macro = 0.913
+F1 weighted = 0.936
+MCC = 0.918
+Kappa = 0.918
+Classes not found
+set()
+              precision    recall  f1-score   support
+
+           0       0.96      0.92      0.94       166
+           1       0.98      0.93      0.95        97
+           2       0.89      0.70      0.79        97
+           3       0.88      0.94      0.91        31
+           4       0.92      0.89      0.90       150
+           5       0.95      0.98      0.96       825
+           6       0.95      0.86      0.91       133
+           7       0.92      0.95      0.94       311
+           8       0.91      0.95      0.93       173
+
+    accuracy                           0.94      1983
+   macro avg       0.93      0.90      0.91      1983
+weighted avg       0.94      0.94      0.94      1983
