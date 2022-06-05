@@ -108,7 +108,7 @@ data_augmentation = keras.Sequential(
   [
     tf.keras.layers.RandomFlip("horizontal_and_vertical"),
     tf.keras.layers.RandomRotation(0.6),
-    tf.keras.layers.RandomZoom(0.3),
+    # tf.keras.layers.RandomZoom(0.3),
     tf.keras.layers.RandomContrast(0.5)
   ]
 )
@@ -126,9 +126,8 @@ model = tf.keras.Sequential([
         tf.keras.layers.Rescaling(1./127.5, offset=-1),                                           # Data rescalation
         base_model,
         tf.keras.layers.GlobalAveragePooling2D(),
-        tf.keras.layers.Dense(1000, activation='relu'),
-        tf.keras.layers.Dense(512, activation='relu'),
-        tf.keras.layers.Dense(256, activation='relu'),
+        tf.keras.layers.Dense(16, activation='relu'),
+        tf.keras.layers.Dense(16, activation='relu'),
         tf.keras.layers.Dense(num_classes)])
 
 opt = keras.optimizers.Adam(learning_rate=0.0001)
