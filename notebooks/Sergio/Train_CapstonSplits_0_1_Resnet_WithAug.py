@@ -24,9 +24,9 @@ data_dir_validation = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_1/"
 
 
 #  Dataset Configuration
-batch_size_param = 100
-img_height = 100            #Max resolution 300     
-img_width = 100
+batch_size_param = 16
+img_height = 64            #Max resolution 300     
+img_width = 64
 initial_epochs = 150
 # test_percent = 0.2
 # initial_seed=33

@@ -22,9 +22,9 @@ ReportFile.seek(0)
 data_dir = Path(os.getcwd() + "/../../data/dataSetOnly11Classes")
 
 #  Dataset Configuration
-batch_size_param = 100
-img_height = 100            #Max resolution 300     
-img_width = 100
+batch_size_param = 16
+img_height = 64            #Max resolution 300     
+img_width = 64
 initial_epochs = 150
 test_percent = 0.5
 initial_seed=33
