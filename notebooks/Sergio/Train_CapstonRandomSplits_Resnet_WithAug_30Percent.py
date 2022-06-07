@@ -25,7 +25,7 @@ data_dir = Path(os.getcwd() + "/../../data/dataSetOnly11Classes")
 batch_size_param = 16
 img_height = 64            #Max resolution 300     
 img_width = 64
-initial_epochs = 150
+initial_epochs = 200
 test_percent = 0.3
 initial_seed=33
 
