@@ -1,0 +1,47 @@
+List of class:
+    0 : Angiectasia
+    1 : Blood
+    2 : Erosion
+    3 : Erythematous
+    4 : Foreign Bodies
+    5 : Ileo-cecal valve
+    6 : Lymphangiectasia
+    7 : Normal
+    8 : Pylorus
+    9 : Reduced Mucosal View
+    10 : Ulcer
+Total time train : 21904.734411478043
+Initial loss: 1.68
+Initial accuracy: 0.68
+Accuracy = 0.682
+Accuracy Balanced = 0.156
+Precision micro = 0.682
+Precision macro = 0.178
+Precision weighted = 0.705
+Recall micro = 0.682
+Recall macro = 0.156
+Recall weighted = 0.682
+F1 micro = 0.682
+F1 macro = 0.150
+F1 weighted = 0.684
+MCC = 0.225
+Kappa = 0.223
+Classes not foundset()
+              precision    recall  f1-score   support
+
+           0       0.01      0.01      0.01        95
+           1       0.00      0.00      0.00       424
+           2       0.00      0.01      0.00       161
+           3       0.00      0.00      0.00        27
+           4       0.06      0.10      0.07       186
+           5       0.20      0.42      0.27      1394
+           6       0.22      0.05      0.08       368
+           7       0.85      0.83      0.84     18485
+           8       0.10      0.11      0.10       591
+           9       0.50      0.17      0.25      1787
+          10       0.03      0.01      0.02       582
+
+    accuracy                           0.68     24100
+   macro avg       0.18      0.16      0.15     24100
+weighted avg       0.70      0.68      0.68     24100
+
