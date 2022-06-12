@@ -116,7 +116,7 @@ data_augmentation = keras.Sequential(
   ]
 )
 
-base_model = tf.keras.applications.desenet.DenseNet169(input_shape=(img_height,img_width,3), 
+base_model = tf.keras.applications.densenet.DenseNet169(input_shape=(img_height,img_width,3), 
                                                     include_top=False, 
                                                     weights= 'imagenet', 
                                                     pooling='avg')
