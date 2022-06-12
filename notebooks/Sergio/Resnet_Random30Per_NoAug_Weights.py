@@ -16,11 +16,11 @@ from sklearn.metrics import confusion_matrix
 import tensorflow_addons as tfa
 
 #ReportName
-ReportName = "Resnet_Splits01_NoAug_NoWeights"
+ReportName = "Resnet_Random30Per_NoAug_Weights"
 ReportFile = open(ReportName+'.txt','w+')     # Create a report file
 ReportFile.seek(0)
-data_dir = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_0/")
-data_dir_validation = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_1/")
+data_dir = Path(os.getcwd() + "/../../data/dataSetOnly11Classes")
+# data_dir_validation = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_1/")
 
 
 #  Dataset Configuration
@@ -29,8 +29,8 @@ img_height = 64
 img_width = 64
 initial_epochs = 30
 sizeLayerExtra = 64
-# test_percent = 0.2
-# initial_seed=33
+test_percent = 0.2
+initial_seed=33
 
 # OnlyCPU = True
 # if OnlyCPU:
@@ -40,10 +40,10 @@ sizeLayerExtra = 64
 train_ds = tf.keras.utils.image_dataset_from_directory(
   data_dir,
   shuffle=True,
-  # validation_split=test_percent,
+  validation_split=test_percent,
   color_mode = "rgb",
-  # subset="training",
-  # seed=initial_seed,
+  subset="training",
+  seed=initial_seed,
   image_size=(img_height, img_width),
   interpolation = "bilinear",
   follow_links = False,
@@ -54,10 +54,10 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
 val_ds = tf.keras.utils.image_dataset_from_directory(
   data_dir_validation,
   shuffle=True,
-  # validation_split=test_percent,
+  validation_split=test_percent,
   color_mode = "rgb",
-  # subset="validation",
-  # seed=initial_seed,
+  subset="validation",
+  seed=initial_seed,
   image_size=(img_height, img_width),
   interpolation = "bilinear",
   follow_links = False,
@@ -99,7 +99,7 @@ for specificClass in data_dir.iterdir():          #Loop for each folder
           initial_count += 1
   weights[weights_temp[tail]]= float(totalImages/(num_classes  * initial_count))
   DataSetPrintInfo[tail] = {"NumClass ":weights_temp[tail],"NumElems": initial_count, "Weight": float(totalImages/(num_classes  * initial_count))}
-# ReportFile.write("Weights per class: "+str(DataSetPrintInfo)+"\n")
+ReportFile.write("Weights per class: "+str(DataSetPrintInfo)+"\n")
 
 AUTOTUNE = tf.data.AUTOTUNE
 train_ds = train_ds.cache().shuffle(10000).prefetch(buffer_size=AUTOTUNE)
@@ -145,8 +145,8 @@ history = model.fit(
   validation_data = val_ds,
   epochs = initial_epochs,
   batch_size = batch_size_param, 
-  verbose=1
-  # class_weight = weights
+  verbose=1,
+  class_weight = weights
 )
 
 model.save(ReportName + '.h5')

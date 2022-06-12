@@ -137,11 +137,7 @@ model = keras.Model(inputs=inputs, outputs=out)
 opt = tf.optimizers.SGD(learning_rate=0.001)
 model.compile(optimizer=opt,
               loss = tf.keras.losses.CategoricalCrossentropy(),
-              metrics=[tf.keras.metrics.CategoricalAccuracy(), 
-                       tfa.metrics.F1Score(num_classes=num_classes, average="micro"), 
-                       tf.keras.metrics.Precision(), 
-                       tf.keras.metrics.Recall(), 
-                       tfa.metrics.MatthewsCorrelationCoefficient(num_classes=num_classes)])
+              metrics=[tf.keras.metrics.CategoricalAccuracy()])
 
 
 history = model.fit(

@@ -16,7 +16,7 @@ from sklearn.metrics import confusion_matrix
 import tensorflow_addons as tfa
 
 #ReportName
-ReportName = "Resnet_Splits01_NoAug_NoWeights"
+ReportName = "EfficenceB1_Splits01_NoAug_Weights"
 ReportFile = open(ReportName+'.txt','w+')     # Create a report file
 ReportFile.seek(0)
 data_dir = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_0/")
@@ -99,7 +99,7 @@ for specificClass in data_dir.iterdir():          #Loop for each folder
           initial_count += 1
   weights[weights_temp[tail]]= float(totalImages/(num_classes  * initial_count))
   DataSetPrintInfo[tail] = {"NumClass ":weights_temp[tail],"NumElems": initial_count, "Weight": float(totalImages/(num_classes  * initial_count))}
-# ReportFile.write("Weights per class: "+str(DataSetPrintInfo)+"\n")
+ReportFile.write("Weights per class: "+str(DataSetPrintInfo)+"\n")
 
 AUTOTUNE = tf.data.AUTOTUNE
 train_ds = train_ds.cache().shuffle(10000).prefetch(buffer_size=AUTOTUNE)
@@ -116,14 +116,14 @@ data_augmentation = keras.Sequential(
   ]
 )
 
-base_model = tf.keras.applications.resnet.ResNet152(input_shape=(img_height,img_width,3), 
+base_model = tf.keras.applications.efficientnet.EfficientNetB1(input_shape=(img_height,img_width,3), 
                                                     include_top=False, 
                                                     weights= 'imagenet', 
                                                     pooling='avg')
 base_model.trainable = False 
 
 inputs = keras.layers.Input((img_height, img_width, 3))
-x = tf.keras.applications.resnet50.preprocess_input(inputs) # Preprocessing layer, normalization -1 1
+x = tf.keras.applications.efficientnet.preprocess_input(inputs) # Preprocessing layer, normalization -1 1
 x = base_model(x)
 
 ## Aquestes capes son opcionals
@@ -145,8 +145,8 @@ history = model.fit(
   validation_data = val_ds,
   epochs = initial_epochs,
   batch_size = batch_size_param, 
-  verbose=1
-  # class_weight = weights
+  verbose=1,
+  class_weight = weights
 )
 
 model.save(ReportName + '.h5')
