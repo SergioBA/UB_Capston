@@ -1,17 +1,17 @@
 # UB_Capston
-Capston project repository for Data Science and Machine Learning Postgraduate Course. *Question to reject* The goal of the project was to analyze Kvasir-Capsule dataset and test different DL models and technics (i.e. Data augmentation) to compare their classification rates.
+Capston project repository for Data Science and Machine Learning Postgraduate Course. The goal of the project was to analyze Kvasir-Capsule dataset and test different DL models and technics (i.e. Data augmentation) to compare their classification rates.
 
 UB_Capston project relies on Kvasir-Capsule dataset, which url can be accessed via: https://osf.io/gr7bn. Also, dataset can be downloaded via: https://osf.io/dv2ag/.
 
 ## Repository Structure
 This repository has the following structure:
- - data: contains the dataset used. There you can find:
+ 📄 data: contains the dataset used. There you can find:
     - OriginalDataset: dataset as provided from Kvasir-Capsule project (336 x 336)
     - dataSetOnly11Classes: original dataset but removing "Ampulla of vater", "Blood - hematin" and "Polyp" due to not enough samples to find patterns
     - dataSetPlits_0_1: original dataset splitted into two block for train & validation
- - info: contains reference information i.e. Kvasir-Capsule code, its thesis or DL links
- - docs: contains UB_Capstone project documentation i.e. Analysis, methodology or models used
- - scripts: folder to store all different tests developed during the project
+ 🤔 info: contains reference information i.e. Kvasir-Capsule code, its thesis or DL links
+ 📖 docs: contains UB_Capstone project documentation i.e. Analysis, methodology or models used
+ 🛠 scripts: folder to store all different tests developed during the project
     - experiments: contains the executed scripts
 	- results: contains the scripts results
 
@@ -50,8 +50,8 @@ Cuda libraries used:
 
 ## Execution details
 Execute the following steps:
- - Go to <UB_Capston/scripts/experiments>
- - Execute <python3 "model".py> where model can be:
+ 💻 Go to <scripts/experiments>
+ 🔥 Execute <python3 "model".py> where model can be:
     - Desnet_Splits01_NoAug_Weights.py
     - EfficenceB1_Splits01_NoAug_Weights.py
     - EfficenceB1_Splits01_NoAug_Weights_BigBatchSize.py
