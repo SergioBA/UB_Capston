@@ -10,8 +10,10 @@ This repository has the following structure:
     - dataSetOnly11Classes: original dataset but removing "Ampulla of vater", "Blood - hematin" and "Polyp" due to not enough samples to find patterns
     - dataSetPlits_0_1: original dataset splitted into two block for train & validation
  - info: contains reference information i.e. Kvasir-Capsule code, its thesis or DL links
- - doc: contains UB_Capstone project documentation i.e. Analysis, methodology or models used
- - notebooks: folder to store all different scripts/tests developed during the project
+ - docs: contains UB_Capstone project documentation i.e. Analysis, methodology or models used
+ - scripts: folder to store all different tests developed during the project
+    - experiments: contains the executed scripts
+	- results: contains the scripts results
 
 ## Team members
  - Javier Sánchez Molino
@@ -48,18 +50,13 @@ Cuda libraries used:
 
 ## Execution details
 Execute the following steps:
- - Go to <UB_Capston/notebooks/experiments>
+ - Go to <UB_Capston/scripts/experiments>
  - Execute <python3 "model".py> where model can be:
-    - Train_CapstonRandomSplits_Desnet_WithAug_30Percent.py
-    - Train_CapstonRandomSplits_Desnet_WithAug_50Percent.py
-    - Train_CapstonRandomSplits_EfficientNetB7_WithAug_30Percent.py
-    - Train_CapstonRandomSplits_EfficientNetB7_WithAug_50Percent.py
-    - Train_CapstonRandomSplits_Resnet_WithAug_30Percent.py
-    - Train_CapstonRandomSplits_Resnet_WithAug_50Percent.py
-    - Train_CapstonSplits_0_1_Basic_WithAug.py
-    - Train_CapstonSplits_0_1_Desnet_WithAug.py
-    - Train_CapstonSplits_0_1_Desnet_WithAug_NOWeights.py
-    - Train_CapstonSplits_0_1_EfficientNetB7_WithAug.py
-    - Train_CapstonSplits_0_1_Resnet_WithAug.py
-    - Train_CapstonSplits_0_1_Resnet_WithAug_BigBatch.py
-    - Train_CapstonSplits_0_1_Resnet_WithAug_NOWeights.py
+    - Desnet_Splits01_NoAug_Weights.py
+    - EfficenceB1_Splits01_NoAug_Weights.py
+    - EfficenceB1_Splits01_NoAug_Weights_BigBatchSize.py
+    - EfficenceB1_Splits01_NoAug_Weights_BigBatchSizex2.py
+    - Resnet_Random30Per_NoAug_Weights.py
+    - Resnet_Splits01_Aug_NoWeights.py
+    - Resnet_Splits01_NoAug_NoWeights.py
+    - Resnet_Splits01_NoAug_Weights.py
