@@ -1,0 +1,48 @@
+List of class:
+    0 : Angiectasia
+    1 : Blood
+    2 : Erosion
+    3 : Erythematous
+    4 : Foreign Bodies
+    5 : Ileo-cecal valve
+    6 : Lymphangiectasia
+    7 : Normal
+    8 : Pylorus
+    9 : Reduced Mucosal View
+    10 : Ulcer
+Weights per class: {'Foreign Bodies': {'NumClass ': 4, 'NumElems': 590, 'Weight': 3.5533127889060094}, 'Blood': {'NumClass ': 1, 'NumElems': 22, 'Weight': 95.29338842975207}, 'Erythematous': {'NumClass ': 3, 'NumElems': 132, 'Weight': 15.882231404958677}, 'Ileo-cecal valve': {'NumClass ': 5, 'NumElems': 2795, 'Weight': 0.7500731826313222}, 'Normal': {'NumClass ': 7, 'NumElems': 15853, 'Weight': 0.13224339528509085}, 'Angiectasia': {'NumClass ': 0, 'NumElems': 771, 'Weight': 2.7191368942341705}, 'Erosion': {'NumClass ': 2, 'NumElems': 345, 'Weight': 6.076679841897233}, 'Pylorus': {'NumClass ': 8, 'NumElems': 938, 'Weight': 2.2350261678619887}, 'Lymphangiectasia': {'NumClass ': 6, 'NumElems': 224, 'Weight': 9.359172077922079}, 'Ulcer': {'NumClass ': 10, 'NumElems': 272, 'Weight': 7.707553475935829}, 'Reduced Mucosal View': {'NumClass ': 9, 'NumElems': 1119, 'Weight': 1.8735071898610773}}
+Total time train : 592.2353181838989
+Initial loss: 2.03
+Initial accuracy: 0.24
+Accuracy = 0.237
+Accuracy Balanced = 0.213
+Precision micro = 0.237
+Precision macro = 0.164
+Precision weighted = 0.767
+Recall micro = 0.237
+Recall macro = 0.213
+Recall weighted = 0.237
+F1 micro = 0.237
+F1 macro = 0.133
+F1 weighted = 0.316
+MCC = 0.145
+Kappa = 0.101
+Classes not foundset()
+              precision    recall  f1-score   support
+
+           0       0.00      0.00      0.00        95
+           1       0.01      0.02      0.01       424
+           2       0.01      0.12      0.01       161
+           3       0.00      0.00      0.00        27
+           4       0.04      0.45      0.07       186
+           5       0.10      0.18      0.13      1394
+           6       0.11      0.28      0.15       368
+           7       0.94      0.21      0.34     18485
+           8       0.12      0.40      0.18       591
+           9       0.42      0.62      0.50      1787
+          10       0.06      0.06      0.06       582
+
+    accuracy                           0.24     24100
+   macro avg       0.16      0.21      0.13     24100
+weighted avg       0.77      0.24      0.32     24100
+
