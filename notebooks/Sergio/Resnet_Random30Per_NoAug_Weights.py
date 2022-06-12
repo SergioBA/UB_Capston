@@ -52,7 +52,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
   batch_size=batch_size_param)
 
 val_ds = tf.keras.utils.image_dataset_from_directory(
-  data_dir_validation,
+  data_dir,
   shuffle=True,
   validation_split=test_percent,
   color_mode = "rgb",
