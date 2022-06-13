@@ -62,3 +62,4 @@ Execute the following steps:
     * Resnet_Splits01_Aug_NoWeights.py
     * Resnet_Splits01_NoAug_NoWeights.py
     * Resnet_Splits01_NoAug_Weights.py
+    * Resnet_Splits01_Aug_Weights.py
