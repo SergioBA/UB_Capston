@@ -1,12 +1,14 @@
 # UB_Capston
-Capston project repository for Data Science and Machine Learning Postgraduate Course. The goal of the project was to analyze Kvasir-Capsule dataset and test different DL models and technics (i.e. Data augmentation) to compare their classification rates.
+*Capston project repository for Data Science and Machine Learning Postgraduate Course.*
+
+The goal of the project was to analyze Kvasir-Capsule dataset and test different DL models and technics (i.e. Data augmentation) to compare their classification rates.
 
 UB_Capston project relies on Kvasir-Capsule dataset, which url can be accessed via: https://osf.io/gr7bn. Also, dataset can be downloaded via: https://osf.io/dv2ag/.
 
 ## Repository Structure
 This repository has the following structure:
- * 📄 **data**: contains the dataset used. There you can find:
-    * OriginalDataset: dataset as provided from Kvasir-Capsule project (336 x 336)
+ * 📄 **[data](/data/)**: contains the dataset used. There you can find:
+    * [OriginalDataset](/data/OriginalDataset/): dataset as provided from Kvasir-Capsule project (336 x 336)
     * dataSetOnly11Classes: original dataset but removing "Ampulla of vater", "Blood - hematin" and "Polyp" due to not enough samples to find patterns
     * dataSetPlits_0_1: original dataset splitted into two block for train & validation
  * 🤔 **info**: contains reference information i.e. Kvasir-Capsule code, its thesis or DL links
