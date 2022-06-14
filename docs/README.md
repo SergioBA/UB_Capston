@@ -152,9 +152,7 @@ Finalmente, para la famila *EfficientNet* la [función](https://www.tensorflow.o
     
 El tamaño de las imágenes originales es de 336x336 píxeles y una resolución de 96ppp. El dataset completo ocupa unos 560MB, lo que dificulta su procesamiento con los modelos que hemos utilizado, que ya de por sí son muy exigentes en cuanto a potencia de cálculo y memoria RAM necesaria. Con nuestras máquinas (ver apartado [2.3](#entorno)) nos hemos visto obligados a reducir el tamaño de las imágenes de entrada a 64x64 píxeles.
 
-El método de **Data Augmentation** consiste en incrementar artificialmente el número de imágenes del subgrupo de entrenamiento mediante la generación de variantes realistas de las imágenes originales. De este modo se reduce el *overfitting* del modelo y funciona como técnica de **regularización**. <font color='red'>***INCLOURE REFERÈNCIA A LA PAG. 613 DE L'AURELIEN***
-
-<font color='black'> 
+El método de **Data Augmentation** consiste en incrementar artificialmente el número de imágenes del subgrupo de entrenamiento mediante la generación de variantes realistas de las imágenes originales. De este modo se reduce el *overfitting* del modelo y funciona como técnica de **regularización**. <font color='red'>***INCLOURE REFERÈNCIA A LA PAG. 613 DE L'AURELIEN***<font color='black'> 
 
 Las técnicas para generar nuevas imágenes consisten en aplicar de forma aleatoria giros, simetrías, modificaciones del contraste o zooms sobre determinadas zonas de la imagen original. Ésta última opción la hemos descartado por considerar que podría llevar a equívoco al modelo si justo se hace zoom sobre una zona en la que no se encuentra la anomalía correspondiente, puesto que la imagen resultante siempre se etiqueta igual que la de partida. En el *script* original tampoco aplican zooms, pero sí el resto de técnicas. Sin embargo, en el *paper* se afirma que no se ha aplicado ninguna técnica de *data augmentation*, a pesar de estar presentes en el *script*. Por tanto, hemos decidido no aplicarlas por defecto en nuestras pruebas. De todos modos, sí las hemos aplicado en algún caso concreto, para determinar si el resultado mejora o no.
 
@@ -223,9 +221,9 @@ Así pues, hemos utilizado tres arquitecturas de CNN distintas:
     
 2. ***DenseNet-169***: tiene un nivel de *accuracy* sobre ImageNet ligeramente [inferior](https://paperswithcode.com/model/densenet?variant=densenet-161) a la *DenseNet-161*, pero las consideramos suficientemente asimilables.
     
-3. ***EfficientNet-B1***: la familia de redes *EfficientNet* fueron introducidas por primera vez en el paper "[EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks](https://arxiv.org/abs/1905.11946)" de 2019, y se caracterizan por presentar un equilibrio excelente entre número de parámetros y nivel de acierto en la clasificación respecto a otras redes ampliamente utilizadas, tal y como puede verse en el gráfico de más abajo. Además, la construcción de las distintas redes de la familia se basa en el modelo base *B0* que se reescala de forma uniforme para cada dimensión de la CNN (anchura, profundidad y resolución). <font color='red'> ***AFEGIR REFERÈNCIA (https://ai.googleblog.com/2019/05/efficientnet-improving-accuracy-and.html)***
+3. ***EfficientNet-B1***: la familia de redes *EfficientNet* fueron introducidas por primera vez en el paper "[EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks](https://arxiv.org/abs/1905.11946)" de 2019, y se caracterizan por presentar un equilibrio excelente entre número de parámetros y nivel de acierto en la clasificación respecto a otras redes ampliamente utilizadas, tal y como puede verse en el gráfico de más abajo. Además, la construcción de las distintas redes de la familia se basa en el modelo base *B0* que se reescala de forma uniforme para cada dimensión de la CNN (anchura, profundidad y resolución). Ver información más detallada en el siguiente [enlace](https://ai.googleblog.com/2019/05/efficientnet-improving-accuracy-and.html).
 
-A continuación se muestra una gráfica comparativa entre distintos modelos según el número de parámetros utilizados y el nivel de *Top-1 Accuracy* sobre la base de imágenes de ImageNet:
+A continuación se muestra una gráfica comparativa (extraída del mismo [enlace](https://ai.googleblog.com/2019/05/efficientnet-improving-accuracy-and.html) anterior) entre distintos modelos según el número de parámetros utilizados y el nivel de *Top-1 Accuracy* sobre la base de imágenes de ImageNet:
 
 ![ModelsComparison](https://www.researchgate.net/publication/352346653/figure/fig5/AS:1033729019486210@1623471612282/Model-Size-vs-Accuracy-Comparison-EfficientNet-B0-is-the-baseline-network-developed-by.jpg)
     
@@ -425,10 +423,7 @@ Sí se ha confirmado es que el modelo con el mayor tamaño de *batch* se ha entr
     
 <a id="metricas"></a>
 ### 3.6. Métricas
-
-<font color='red'>***DESTACAR CATEGORICAL ACCURACY, ENLLOC D'ACCURACY DIRECTAMENT. AQUÍ ES TRACTARÀ DE DIR QUE S'HAN UTILITZAT LES MÈTRIQUES QUE JA TENIA EL SKLEARN, SENSE NECESSITAT D'HAVER-LES HAGUT DE DEFINIR NOSALTRES MANUALMENT***
-
-<font color='black'>
+En una primera versión, definimos nuestras propias funciones para calcular las distintas métricas en las que estábamos interesados. Sin embargo, para evitar posibles problemas y comportamientos no deseados con los modelos, decidimos utilizar las suministradas por 
 
 ## 4. Conclusiones
 
