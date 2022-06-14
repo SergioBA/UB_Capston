@@ -43,7 +43,8 @@ A pesar de la distinta naturaleza que presentan las diferentes clases no se les 
 En el *paper* original se utilizan dos modelos de clasificación. Ambos corresponden a redes neuronales convolucionales (CNN, por sus siglas en inglés) con arquitecturas que han demostrado tener un buen comportamiento en la clasificación de imágenes del sistema gastrointestinal a partir de colonoscopias normales (no de imágenes procedentes de una cápsula endoscópica ingerida):
 
 * ***ResNet-152***: arquitectura ganadora de la *ImageNet Challenge* (ILSVRC) de 2015 formada por una CNN con 152 capas que presentaba como principal innovación el uso de *skip connections*, es decir, la unión del input de una capa al output de otra capa varios niveles por encima.
-    <font color='red'>**AFEGIR REFERENCIA AURÉLIEN**<font color='black'>
+
+
 * ***DenseNet-161***: se caracteriza por presentar conexiones densas entre las distintas capas mediante los llamados [*dense blocks*](https://paperswithcode.com/method/dense-block), en los que las capas que lo componen están todas conectadas entre sí directamente unas con otras. Para mantener la naturaleza de retroalimentación de las CNN, cada capa dentro de un *dense block* obtiene inputs adicionales de todas las capas precedentes, y pasa su propio *feature-map* a las capas siguientes.
 
 El objetivo del presente proyecto es desarrollar una metodología mediante un dataset de imágenes obtenidas a partir de los fotogramas de vídeos grabados por cápsulas endoscópicas que permita, dada una imagen, detectar de forma automática las distintas anomalías del aparato gastrointestinal que puedan verse.
@@ -142,7 +143,7 @@ Por tanto, lo que ocurre con los *splits* originales es que las imágenes de val
 
 <a id="preprocesado"></a>
 ### 3.2. Preprocesado y Data Augmentation
-Después de [cargar](https://www.tensorflow.org/tutorials/load_data/images?hl=en) todas las imágenes mediante las utilidades específicas de Keras, el **preprocesado** básico a aplicar consiste en reescalar las imágenes para que los valores de los píxels no esté comprendido en el rango usual de [0,255] sino que cubra el intervalo de valores [-1,1] o bien [0,1].
+Después de [cargar](https://www.tensorflow.org/tutorials/load_data/images?hl=en) todas las imágenes mediante las utilidades específicas de Keras, el **preprocesado** básico a aplicar consiste en reescalar las imágenes para que los valores de los píxeles no esté comprendido en el rango usual de [0,255] sino que cubra el intervalo de valores [-1,1] o bien [0,1].
 
 Todas las redes de la familia *ResNet* tienen su propio método de [preprocesado](https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet50/preprocess_input) para homogeneizar los inputs al tamaño de las imágenes originales con las que se entrenaron las redes. La función que realiza automáticamente este reescalado es la `tf.keras.applications.resnet50.preprocess_input`. Asume que las imágenes de entrada vienen con tres canales de color RGB y valores de los píxeles en el rango de [0,255]. Internamente transforma las imágenes con los tres canales de color en formato BGR, y valores centrados en 0 según el dataset de ImageNet, sin reescalar.
     
@@ -152,11 +153,9 @@ Finalmente, para la famila *EfficientNet* la [función](https://www.tensorflow.o
     
 El tamaño de las imágenes originales es de 336x336 píxeles y una resolución de 96ppp. El dataset completo ocupa unos 560MB, lo que dificulta su procesamiento con los modelos que hemos utilizado, que ya de por sí son muy exigentes en cuanto a potencia de cálculo y memoria RAM necesaria. Con nuestras máquinas (ver apartado [2.3](#entorno)) nos hemos visto obligados a reducir el tamaño de las imágenes de entrada a 64x64 píxeles.
 
-El método de **Data Augmentation** consiste en incrementar artificialmente el número de imágenes del subgrupo de entrenamiento mediante la generación de variantes realistas de las imágenes originales. De este modo se reduce el *overfitting* del modelo y funciona como técnica de **regularización**. <span style="color: red;">***INCLOURE REFERÈNCIA A LA PAG. 613 DE L'AURELIEN***</span>.
+El método de **Data Augmentation** consiste en incrementar artificialmente el número de imágenes del subgrupo de entrenamiento mediante la generación de variantes realistas de las imágenes originales. De este modo se reduce el *overfitting* del modelo y funciona como técnica de **regularización**.
 
 Las técnicas para generar nuevas imágenes consisten en aplicar de forma aleatoria giros, simetrías, modificaciones del contraste o zooms sobre determinadas zonas de la imagen original. Ésta última opción la hemos descartado por considerar que podría llevar a equívoco al modelo si justo se hace zoom sobre una zona en la que no se encuentra la anomalía correspondiente, puesto que la imagen resultante siempre se etiqueta igual que la de partida. En el *script* original tampoco aplican zooms, pero sí el resto de técnicas. Sin embargo, en el *paper* se afirma que no se ha aplicado ninguna técnica de *data augmentation*, a pesar de estar presentes en el *script*. Por tanto, hemos decidido no aplicarlas por defecto en nuestras pruebas. De todos modos, sí las hemos aplicado en algún caso concreto, para determinar si el resultado mejora o no.
-
-<br>
 
 Existe la opción de realizar la *data augmentation* como parte del preprocesado, antes de enviar las imágenes al modelo. Sin embargo, también pueden incorporarse [capas iniciales extras](https://www.tensorflow.org/tutorials/images/data_augmentation?hl=en) en la CNN que se encarguen de realizar este incremento de imágenes y que sólo aplicará cuando se trate del subconjunto de entrenamiento. 
     
@@ -292,14 +291,7 @@ La implementación de estos pesos ha consistido en informar en el método `fit()
     
 En el *paper* original utilizan unos pesos por clase que probablemente se hayan obtenido mediante un proceso de *prueba-error*, utilizando el juego de pesos que dio un mejor resultado. Al no poder replicar el proceso de obtención de estos pesos, hemos preferido no utilizarlos y calcularlos nosotros mismos.
     
-A pesar de existir funciones ya implementadas, como por ejemplo en la librería Sklearn, la función ` sklearn.utils.compute_class_weight()` (a la que como primer parámetro, se le debería pasar `balanced`), hemos preferido definir nuestra propia función para tener pleno control sobre el método de cálculo y así poder experimentar con distintas fórmulas. Finalmente, aunque hemos probado otras alternativas, el método seleccionado se corresponde con el que calcula internamente la función mencionada de Sklearn, que obedece a la siguiente fórmula:
-
-<div class="math">
-\begin{equation}
-  class\_weight_i = \frac{numero\_de\_imagenes}{num\_clases · num\_imagenes\_clase\_i}  
-\end{equation}
-</div>
-
+A pesar de existir funciones ya implementadas, como por ejemplo en la librería Sklearn, la función ` sklearn.utils.compute_class_weight()` (a la que como primer parámetro, se le debería pasar `balanced`), hemos preferido definir nuestra propia función para tener pleno control sobre el método de cálculo y así poder experimentar con distintas fórmulas. Finalmente, aunque hemos probado otras alternativas, el método seleccionado se corresponde con el que calcula internamente la función mencionada de Sklearn, que obedece a la siguiente fórmula: *class_weight_i = numero_de_imagenes / (num_clases · num_imagenes_clase_i)*.
 
 Para ser coherentes con el tratamiento a dar al *split*, estos pesos se calculan exclusivamente con el subgrupo de entrenamiento, sin tener en cuenta el de validación. Así pues, con *splits* no estratificados sería esperable un mal comportamiento.
     
@@ -327,8 +319,7 @@ Se oberva que la versión sin pesos alcanza mayores niveles de *accuracy* y meno
     
     
 Como alternativa a los pesos a nivel de clase, también existe la posibilidad de asignar pesos a nivel de input mediante el parámetro `sample_weight`. Esta opción podría ser de utilidad, por ejemplo, en el caso de tener un dataset con unos inputs etiquetados por expertos, y otros inputs etiquetados por no profesionales y, por tanto, potencialmente menos fiables que los primeros. En esta situación, se podría querer sobreponderar los inputs etiquetados por expertos en detrimento del resto.
-    
-<span style="color: red;">***INCLOURE REFERÈNCIA A L'AURELIEN PAG. 397***</span>
+
 
 La ponderación por input sustituye a la ponderación por clases. Esto es, no son compatibles entre sí. En nuestro caso, a pesar que en el *paper* original sí hacen el ejercicio de aplicar pesos a nivel de *sample*, no hemos explorado esta opción al no considerar que tenga demasiado sentido con el dataset dado.
 
@@ -339,9 +330,11 @@ Finalmente, también se podría explorar la posibilidad de fijar los pesos en fu
 <a id="optimizador"></a>
 #### 3.4.2. Learning rate y Optimizador
     
-<span style="color: red;">***INCLOURE LA TEORIA DE L'AURELIEN SOBRE EL LEARNING RATE I OPTIMITZADOR 'ADAM'***</span>
+Hemos usado como optimizador el `tf.keras.optimizers.SGD` por ser el utilizado en el *paper* original, y además porque permite asignarle un valor específico al *learning rate* que no se modifica a lo largo del entrenamiento.
 
-    
+Como alternativa, se podría haber utilizado un optimizador más sofisticado, como el `Adam` (*adaptive moment estimation*), que aplica un algoritmo de optimización del *learning rate* de modo que utiliza el gradiente para determinar la aceleración, no la velocidad del grado de avance (*momentum optimization*). Además, también se combina con el algoritmo *RMSProp* que hace disminuir el *learning rate* en función de la pendiente de la dimensión, pero teniendo en cuenta sólo los gradientes de las iteraciones más recientes para evitar que decrezca demasiado rápido y el proceso se pare antes de converger al óptimo global. El problema es que este optimizador añade hiperparámetros extras que no resultan triviales de afinar y, en consecuencia, hemos decidido quedarnos con el Gradiente Descendente.
+
+
 <a id="pooling"></a>
 #### 3.4.3. Parámetro *pooling*
     
@@ -424,7 +417,19 @@ Sí se ha confirmado es que el modelo con el mayor tamaño de *batch* se ha entr
     
 <a id="metricas"></a>
 ### 3.6. Métricas
-En una primera versión, definimos nuestras propias funciones para calcular las distintas métricas en las que estábamos interesados. Sin embargo, para evitar posibles problemas y comportamientos no deseados con los modelos, decidimos utilizar las suministradas por 
+En una primera versión, definimos nuestras propias funciones para calcular las distintas métricas en las que estábamos interesados. Sin embargo, para evitar posibles problemas y comportamientos no deseados con los modelos, decidimos utilizar las suministradas por la librería Sklearn:
+
+```python
+    import sklearn.metrics as mtc
+```
+
+En concreto, hemos calculado la `accuracy_score` y `balanced_accuracy_score`, aunque las principales métricas han sido las que se utilizan en el *paper*: `precision_score`, `recall_score` y `f1_score`, en sus distintas versiones según el parámetro `average` (`micro`, `macro` y `weighted`).
+
+Finalmente, también se ha incluido la `matthews_corrcoef`, por estar también calculada en el *paper*, así como la `cohen_kappa_score`, que mide la concordancia observada entre las categorías reales y predichas, teniendo en cuenta el efecto del azar.
+
+En la carpeta [reports](https://github.com/SergioBA/UB_Capston/tree/main/scripts/results/reports) de nuestro repositorio pueden verse los valores de todas estas métricas para todos los modelos ejecutados.
+    
+Por último, conviene destacar que durante el proceso de entrenamiento, sólo hemos utilizado la `CategoricalAccuracy()` (al tratarse de un problema de clasificación no sería correcto utilizar la `Accuracy()`) mediante el parámetro `metrics` del método `compile` del modelo porque comprobamos que añadir más métricas, al calcularlas y mostrarlas para cada *epoch*, ralentizaba sustancialmente el proceso.
 
 ## 4. Conclusiones
 
