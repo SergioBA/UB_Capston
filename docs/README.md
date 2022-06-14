@@ -293,9 +293,14 @@ La implementación de estos pesos ha consistido en informar en el método `fit()
 En el *paper* original utilizan unos pesos por clase que probablemente se hayan obtenido mediante un proceso de *prueba-error*, utilizando el juego de pesos que dio un mejor resultado. Al no poder replicar el proceso de obtención de estos pesos, hemos preferido no utilizarlos y calcularlos nosotros mismos.
     
 A pesar de existir funciones ya implementadas, como por ejemplo en la librería Sklearn, la función ` sklearn.utils.compute_class_weight()` (a la que como primer parámetro, se le debería pasar `balanced`), hemos preferido definir nuestra propia función para tener pleno control sobre el método de cálculo y así poder experimentar con distintas fórmulas. Finalmente, aunque hemos probado otras alternativas, el método seleccionado se corresponde con el que calcula internamente la función mencionada de Sklearn, que obedece a la siguiente fórmula:
-    
-$$ class\_weight_i = \frac{numero\_de\_imagenes}{num\_clases · num\_imagenes\_clase\_i}  $$
-    
+
+<div class="math">
+\begin{equation}
+  class\_weight_i = \frac{numero\_de\_imagenes}{num\_clases · num\_imagenes\_clase\_i}  
+\end{equation}
+</div>
+
+
 Para ser coherentes con el tratamiento a dar al *split*, estos pesos se calculan exclusivamente con el subgrupo de entrenamiento, sin tener en cuenta el de validación. Así pues, con *splits* no estratificados sería esperable un mal comportamiento.
     
 A continuación mostramos los resultados obtenidos con la arquitectura *ResNet-152*, sin *data augmentation* y el *split* original del *paper*:
@@ -323,9 +328,7 @@ Se oberva que la versión sin pesos alcanza mayores niveles de *accuracy* y meno
     
 Como alternativa a los pesos a nivel de clase, también existe la posibilidad de asignar pesos a nivel de input mediante el parámetro `sample_weight`. Esta opción podría ser de utilidad, por ejemplo, en el caso de tener un dataset con unos inputs etiquetados por expertos, y otros inputs etiquetados por no profesionales y, por tanto, potencialmente menos fiables que los primeros. En esta situación, se podría querer sobreponderar los inputs etiquetados por expertos en detrimento del resto.
     
-<font color='red'>***INCLOURE REFERÈNCIA A L'AURELIEN PAG. 397***
-
-<font color='black'>
+<span style="color: red;">***INCLOURE REFERÈNCIA A L'AURELIEN PAG. 397***</span>
 
 La ponderación por input sustituye a la ponderación por clases. Esto es, no son compatibles entre sí. En nuestro caso, a pesar que en el *paper* original sí hacen el ejercicio de aplicar pesos a nivel de *sample*, no hemos explorado esta opción al no considerar que tenga demasiado sentido con el dataset dado.
 
