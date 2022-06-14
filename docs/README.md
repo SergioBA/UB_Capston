@@ -152,7 +152,7 @@ Finalmente, para la famila *EfficientNet* la [función](https://www.tensorflow.o
     
 El tamaño de las imágenes originales es de 336x336 píxeles y una resolución de 96ppp. El dataset completo ocupa unos 560MB, lo que dificulta su procesamiento con los modelos que hemos utilizado, que ya de por sí son muy exigentes en cuanto a potencia de cálculo y memoria RAM necesaria. Con nuestras máquinas (ver apartado [2.3](#entorno)) nos hemos visto obligados a reducir el tamaño de las imágenes de entrada a 64x64 píxeles.
 
-El método de **Data Augmentation** consiste en incrementar artificialmente el número de imágenes del subgrupo de entrenamiento mediante la generación de variantes realistas de las imágenes originales. De este modo se reduce el *overfitting* del modelo y funciona como técnica de **regularización**. <font color='red'>***INCLOURE REFERÈNCIA A LA PAG. 613 DE L'AURELIEN***<font color='black'> 
+El método de **Data Augmentation** consiste en incrementar artificialmente el número de imágenes del subgrupo de entrenamiento mediante la generación de variantes realistas de las imágenes originales. De este modo se reduce el *overfitting* del modelo y funciona como técnica de **regularización**. <span style="color: red;">***INCLOURE REFERÈNCIA A LA PAG. 613 DE L'AURELIEN***</span>.
 
 Las técnicas para generar nuevas imágenes consisten en aplicar de forma aleatoria giros, simetrías, modificaciones del contraste o zooms sobre determinadas zonas de la imagen original. Ésta última opción la hemos descartado por considerar que podría llevar a equívoco al modelo si justo se hace zoom sobre una zona en la que no se encuentra la anomalía correspondiente, puesto que la imagen resultante siempre se etiqueta igual que la de partida. En el *script* original tampoco aplican zooms, pero sí el resto de técnicas. Sin embargo, en el *paper* se afirma que no se ha aplicado ninguna técnica de *data augmentation*, a pesar de estar presentes en el *script*. Por tanto, hemos decidido no aplicarlas por defecto en nuestras pruebas. De todos modos, sí las hemos aplicado en algún caso concreto, para determinar si el resultado mejora o no.
 
@@ -336,9 +336,7 @@ Finalmente, también se podría explorar la posibilidad de fijar los pesos en fu
 <a id="optimizador"></a>
 #### 3.4.2. Learning rate y Optimizador
     
-<font color='red'>***INCLOURE LA TEORIA DE L'AURELIEN SOBRE EL LEARNING RATE I OPTIMITZADOR 'ADAM'***
-
-<font color='black'>
+<span style="color: red;">***INCLOURE LA TEORIA DE L'AURELIEN SOBRE EL LEARNING RATE I OPTIMITZADOR 'ADAM'***</span>
 
     
 <a id="pooling"></a>
