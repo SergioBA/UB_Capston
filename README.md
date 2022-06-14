@@ -1,5 +1,5 @@
 # UB_Capston
-*Capston project repository for Data Science and Machine Learning Postgraduate Course.*
+*Capston project repository for Data Science and Machine Learning Postgraduate Course*
 
 The goal of the project was to analyze Kvasir-Capsule dataset and test different DL models and technics (i.e. Data augmentation) to compare their classification rates.
 
@@ -9,13 +9,13 @@ UB_Capston project relies on Kvasir-Capsule dataset, which url can be accessed v
 This repository has the following structure:
  * 📄 **[data](/data/)**: contains the dataset used. There you can find:
     * [OriginalDataset](/data/OriginalDataset/): dataset as provided from Kvasir-Capsule project (336 x 336)
-    * dataSetOnly11Classes: original dataset but removing "Ampulla of vater", "Blood - hematin" and "Polyp" due to not enough samples to find patterns
-    * dataSetPlits_0_1: original dataset splitted into two block for train & validation
- * 🤔 **info**: contains reference information i.e. Kvasir-Capsule code, its thesis or DL links
- * 📖 **docs**: contains UB_Capstone project documentation i.e. Analysis, methodology or models used
- * 🛠 **scripts**: folder to store all different tests developed during the project
-    * experiments: contains the executed scripts
-	* results: contains the scripts results
+    * [dataSetOnly11Classes](/data/dataSetOnly11Classes/): original dataset but removing "Ampulla of vater", "Blood - hematin" and "Polyp" due to not enough samples to find patterns
+    * [dataSetPlits_0_1](/data/dataSetPlits_0_1/): original dataset splitted into two block for train & validation
+ * 🤔 **[info](/info/)**: contains reference information i.e. Kvasir-Capsule code, its thesis or DL links
+ * 📖 **[docs](/docs/)**: contains UB_Capstone project documentation i.e. Analysis, methodology or models used
+ * 🛠 **[scripts](/scripts/)**: folder to store all different tests developed during the project
+    * [experiments](/scripts/experiments/): contains the executed scripts
+	* [results](/scripts/results/): contains the scripts results
 
 ## Team members
  - Javier Sánchez Molino
