@@ -1,6 +1,16 @@
-# Execute -->  cd /home/sergio/Postgrado/UB_Capston/notebooks/Sergio/ ; python3   Train_Capston.py
+#!/usr/bin/env python3 
+# -*- coding: utf-8 -*- 
+#----------------------------------------------------------------------------
+# Created By  :  Team UB_Capston
+# Created Date:  05/06/2022
+# version     :  2.0
+# ---------------------------------------------------------------------------
+# Execute folder    :  cd /UB_Capston/scripts/experiments/ ; 
+#                      python3   ScriptName.py
+
+#  Imports
 import time
-start = time.time()                       # Time measurement
+start = time.time()                               # Start Time measurement
 import matplotlib.pyplot as plt
 import os
 import tensorflow as tf
@@ -15,28 +25,28 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import confusion_matrix
 import tensorflow_addons as tfa
 
-#ReportName
-ReportName = "Resnet_Splits01_Aug_Weights"
-ReportFile = open(ReportName+'.txt','w+')     # Create a report file
-ReportFile.seek(0)
-data_dir = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_0/")
-data_dir_validation = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_1/")
+
+ReportName = "Resnet_Splits01_Aug_Weights"                                          # ReportName
+ReportFile = open(ReportName+'.txt','w+')                                           # Create a report file
+ReportFile.seek(0)                                                                  # Set file index to 0. Just to replace all file content
+data_dir = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_0/")              # Path for Dataset 1 (Train)
+data_dir_validation = Path(os.getcwd() + "/../../data/dataSetPlits_0_1/split_1/")   # Path for Dataset 2 (Test) 
 
 
 #  Dataset Configuration
-batch_size_param = 8
-img_height = 64            
-img_width = 64
-initial_epochs = 30
-sizeLayerExtra = 64
-# test_percent = 0.2
+batch_size_param = 8        # Batch size used for fast execution
+img_height = 64             # Height value for image resize 
+img_width = 64              # Width value for image resize 
+initial_epochs = 30         # Train Epochs
+sizeLayerExtra = 64         # Size for extra layer if is used
+# test_percent = 0.2        # Precentage for test 
 # initial_seed=33
 
-# OnlyCPU = True
-# if OnlyCPU:
-#   os.environ["CUDA_VISIBLE_DEVICES"]="-1"    
+# Uncomment the next lines to set Global ariables and disable the GPU process
+# os.environ["CUDA_VISIBLE_DEVICES"]="-1"    
 # os.environ["TF_GPU_ALLOCATOR"]="cuda_malloc_async"
 
+#Train Dataset load for a directory
 train_ds = tf.keras.utils.image_dataset_from_directory(
   data_dir,
   shuffle=True,
@@ -51,6 +61,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
   crop_to_aspect_ratio = False,
   batch_size=batch_size_param)
 
+#Test Dataset load for a directory
 val_ds = tf.keras.utils.image_dataset_from_directory(
   data_dir_validation,
   shuffle=True,
@@ -65,7 +76,7 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
   crop_to_aspect_ratio = False,
   batch_size=batch_size_param)
 
-#Load images for validation
+#Load images for validation in a list (labels and images)
 valImages = np.array([])
 vallabels =  np.array([])
 valDataList = []
@@ -76,6 +87,7 @@ for image, label in val_ds.take(-1):
 vallabels = np.array(vallabelsList)
 valImages = np.array(valDataList)
 
+# Generate a class list from de Train Dataset and print It in the report
 ReportFile.write("List of class:\n")
 class_names = train_ds.class_names
 num_classes = len(class_names)        #Number of classes
@@ -87,6 +99,8 @@ for e in class_names:                 # Temporal dict with class name and class 
     weights_temp[e] = count
     count = count + 1
 
+# Calc all the images for a Weights calculation.
+# Currently method --> Only Weights related to number of samples for each class
 images = data_dir.glob('**/*.jpg')
 totalImages = len(list(images))
 weights = dict()                        #Create dictionary with 
@@ -101,48 +115,37 @@ for specificClass in data_dir.iterdir():          #Loop for each folder
   DataSetPrintInfo[tail] = {"NumClass ":weights_temp[tail],"NumElems": initial_count, "Weight": float(totalImages/(num_classes  * initial_count))}
 ReportFile.write("Weights per class: "+str(DataSetPrintInfo)+"\n")
 
+# Load all images in Ram for fast execution
 AUTOTUNE = tf.data.AUTOTUNE
 train_ds = train_ds.cache().shuffle(10000).prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
-# Add more images due a Unbalanced input data
-# Doc ----> https://www.tensorflow.org/guide/keras/preprocessing_layers
-data_augmentation = keras.Sequential(
-  [
-    tf.keras.layers.RandomFlip("horizontal_and_vertical"),
-    tf.keras.layers.RandomRotation(0.6),
-    # tf.keras.layers.RandomZoom(0.3),
-    tf.keras.layers.RandomContrast(0.5)
-  ]
-)
-
+# Base model used Resnet - Desnet - EfficenceB1
 base_model = tf.keras.applications.resnet.ResNet152(input_shape=(img_height,img_width,3), 
                                                     include_top=False, 
                                                     weights= 'imagenet', 
                                                     pooling='avg')
-base_model.trainable = False 
-
+base_model.trainable = False                                                # Just freeze weights to no modify It
 inputs = keras.layers.Input((img_height, img_width, 3))
-inputs = keras.layers.RandomFlip("horizontal_and_vertical")(inputs)
-inputs = keras.layers.RandomRotation(0.6)(inputs)
-inputs = keras.layers.RandomContrast(0.5)(inputs)
-x = tf.keras.applications.resnet50.preprocess_input(inputs) # Preprocessing layer, normalization -1 1
-x = base_model(x)
+inputs = keras.layers.RandomFlip("horizontal_and_vertical")(inputs)         # Data augmentation
+inputs = keras.layers.RandomRotation(0.6)(inputs)                           # Add more images due a Unbalanced input data   
+inputs = keras.layers.RandomContrast(0.5)(inputs)                           # Doc ----> https://www.tensorflow.org/guide/keras/preprocessing_layers
 
-## Aquestes capes son opcionals
-x = keras.layers.Dropout(0.4)(x)      
-x = keras.layers.Dense(sizeLayerExtra, activation='relu')(x)
-x = keras.layers.Dropout(0.2)(x)   
+x = tf.keras.applications.resnet50.preprocess_input(inputs)                 # Preprocessing layer, dependind the Resnet-Desnet-EfficenceB1
+x = base_model(x)
+x = keras.layers.Dropout(0.4)(x)                                            # Drop layer to avoid overfitting
+x = keras.layers.Dense(sizeLayerExtra, activation='relu')(x)                # Extra layers to learn specifica features
+x = keras.layers.Dropout(0.2)(x)                                            # Drop layer to avoid overfitting
 
 out = keras.layers.Dense(num_classes, activation='softmax')(x)           
 model = keras.Model(inputs=inputs, outputs=out) 
 
-opt = tf.optimizers.SGD(learning_rate=0.001)
-model.compile(optimizer=opt,
+# Model compilation
+model.compile(optimizer=tf.optimizers.SGD(learning_rate=0.001),
               loss = tf.keras.losses.CategoricalCrossentropy(),
               metrics=[tf.keras.metrics.CategoricalAccuracy()])
 
-
+#Launch the train 
 history = model.fit(
   train_ds,
   validation_data = val_ds,
@@ -152,26 +155,24 @@ history = model.fit(
   class_weight = weights
 )
 
+# Save model for a future usage
 model.save(ReportName + '.h5')
 # print("Modelo guardado!")
 
+#Print Accuray and Loss in the Report file
 acc = history.history['categorical_accuracy']
 val_acc = history.history['val_categorical_accuracy']
-
 loss = history.history['loss']
 val_loss = history.history['val_loss']
-
 epochs_range = range(initial_epochs)
-
 end = time.time()
 total_time = end - start
 ReportFile.write("Total time train : "+ str(total_time)+"\n")
-
 loss0, accuracy0, *is_anything_else_being_returned = model.evaluate(valImages,vallabels)
 ReportFile.write("Initial loss: {:.2f}\n".format(loss0))
 ReportFile.write("Initial accuracy: {:.2f}\n".format(accuracy0))
 
-# Evaluate the model
+# Evaluate the model (Function)
 def test_model(y_true, y_predicted):
     ReportFile.write("Accuracy = {:.3f}\n".format(mtc.accuracy_score(y_true, y_predicted)))
     ReportFile.write("Accuracy Balanced = {:.3f}\n".format(mtc.balanced_accuracy_score(y_true, y_predicted)))
@@ -192,7 +193,7 @@ def test_model(y_true, y_predicted):
     ReportFile.write("Kappa = {:.3f}\n".format(mtc.cohen_kappa_score(y_true, y_predicted)))
 
 
-# Last number from the models
+# Prepare Labels predicted and Labels for evaluation
 predValImages = model.predict(valImages)
 predictionOfValImages = []
 for value in predValImages:
@@ -202,6 +203,7 @@ vallabelsListToEval = []
 for value in vallabels:
   vallabelsListToEval.append(np.argmax(value))
 
+# Just print some indicator in the report file
 test_model(vallabelsListToEval, predictionOfValImages)
 ReportFile.write("Classes not found" + str(set(vallabelsListToEval) - set(predictionOfValImages))+"\n")
 report = classification_report(vallabelsListToEval, predictionOfValImages)
@@ -209,7 +211,7 @@ ReportFile.write(report+"\n")
 ReportFile.truncate()
 ReportFile.close() 
 
-# Store images ina file
+# Store images in file  Accuracy and Loss
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 3, 1)
 plt.plot(epochs_range, acc, label='Training Accuracy')
@@ -224,7 +226,7 @@ plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.savefig(ReportName + '_Train_Val.png')
 
-# confusion matrix plot
+# Store Confusion matrix plot
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 1, 1)
 cm = confusion_matrix(vallabelsListToEval, predictionOfValImages, normalize='true')
